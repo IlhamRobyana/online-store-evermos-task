@@ -27,12 +27,24 @@ func migrateScheme(DB *gorm.DB) {
 
 	isTableDropped := os.Getenv("DROP_TABLE")
 	if isTableDropped == "true" {
+		DB.Model(&entity.OrderProduct{}).RemoveForeignKey("order_id", "orders(id)")
+		DB.Model(&entity.OrderProduct{}).RemoveForeignKey("product_id", "products(id)")
+		DB.Model(&entity.Order{}).RemoveForeignKey("user_id", "users(id)")
 		DB.DropTableIfExists(
+			&entity.OrderProduct{},
 			&entity.User{},
+			&entity.Order{},
+			&entity.Product{},
 		)
 	}
 
 	DB.AutoMigrate(
+		&entity.OrderProduct{},
 		&entity.User{},
+		&entity.Order{},
+		&entity.Product{},
 	)
+	DB.Model(&entity.OrderProduct{}).AddForeignKey("order_id", "orders(id)", "RESTRICT", "RESTRICT")
+	DB.Model(&entity.OrderProduct{}).AddForeignKey("product_id", "products(id)", "RESTRICT", "RESTRICT")
+	DB.Model(&entity.Order{}).AddForeignKey("user_id", "users(id)", "RESTRICT", "RESTRICT")
 }

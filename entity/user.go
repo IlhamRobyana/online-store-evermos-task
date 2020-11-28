@@ -5,6 +5,7 @@ type User struct {
 	ID       uint64 `json:"id" gorm:"primary_key;type:bigserial"`
 	Username string `json:"username" gorm:"unique;not null"`
 	Password string `json:"password" gorm:"not null"`
+	Timestamp
 }
 
 // These following two structs are put on different structs
