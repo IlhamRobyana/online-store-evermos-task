@@ -17,7 +17,9 @@ func Signup(c echo.Context) (e error) {
 		return c.JSON(http.StatusBadRequest, map[string]interface{}{"message": "Invalid request data"})
 	}
 
-	user := entity.User{0, r.Username, r.Password}
+	user := entity.User{}
+	user.Username = r.Username
+	user.Password = r.Password
 	userCore := getCore()
 	response, e := userCore.signup(user)
 	if e != nil {
