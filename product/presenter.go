@@ -5,7 +5,7 @@ import (
 	"strconv"
 
 	"github.com/ilhamrobyana/online-store-evermos-task/entity"
-	"github.com/ilhamrobyana/online-store-evermos-task/storage"
+	pg "github.com/ilhamrobyana/online-store-evermos-task/pg_storage"
 	"github.com/labstack/echo"
 )
 
@@ -88,9 +88,8 @@ func getCore() (c *core) {
 
 	if c == nil {
 		c = new(core)
-		productStorage, _ := storage.GetProductStorage(storage.Postgre)
 
-		c.productStorage = productStorage
+		c.productStorage = pg.Product{}
 		coreInstance = c
 	}
 

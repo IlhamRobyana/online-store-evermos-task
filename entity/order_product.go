@@ -8,5 +8,4 @@ type OrderProduct struct {
 	Product   *Product `json:"product"`
 	ProductID uint64   `json:"product_id" gorm:"foreign_key;type:bigserial"`
 	Quantity  uint     `json:"quantity"`
-	Timestamp
 }

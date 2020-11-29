@@ -1,26 +1,20 @@
 package pg_storage
 
-import "github.com/ilhamrobyana/online-store-evermos-task/entity"
+import (
+	"github.com/ilhamrobyana/online-store-evermos-task/entity"
+	"github.com/jinzhu/gorm"
+)
 
-type User struct{}
+type User struct {
+	Client *gorm.DB
+}
 
 func (u *User) Create(user entity.User) (entity.User, error) {
-	client, e := GetPGClient()
-	defer client.Close()
-
-	if e != nil {
-		return entity.User{}, e
-	}
-	e = client.Create(&user).Error
+	e := u.Client.Create(&user).Error
 	return user, e
 }
 
-func (p *User) GetByUsername(username string) (user entity.User, e error) {
-	client, e := GetPGClient()
-	defer client.Close()
-	if e != nil {
-		return
-	}
-	e = client.Where("username = ?", username).First(&user).Error
+func (u *User) GetByUsername(username string) (user entity.User, e error) {
+	e = u.Client.Where("username = ?", username).First(&user).Error
 	return
 }

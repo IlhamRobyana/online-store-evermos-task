@@ -9,5 +9,4 @@ type Product struct {
 	Price         float64   `json:"price"`
 	Discount      float64   `json:"discount"`
 	DiscountUntil time.Time `json:"discount_until"`
-	Timestamp
 }

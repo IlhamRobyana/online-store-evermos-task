@@ -1,57 +1,34 @@
 package pg_storage
 
-import "github.com/ilhamrobyana/online-store-evermos-task/entity"
+import (
+	"github.com/ilhamrobyana/online-store-evermos-task/entity"
+	"github.com/jinzhu/gorm"
+)
 
-type Product struct{}
+type Product struct {
+	Client *gorm.DB
+}
 
 func (p *Product) Create(product entity.Product) (entity.Product, error) {
-	client, e := GetPGClient()
-	defer client.Close()
-
-	if e != nil {
-		return product, e
-	}
-
-	e = client.Create(&product).Error
+	e := p.Client.Create(&product).Error
 	return product, e
 }
 func (p *Product) GetAll() (productList []entity.Product, e error) {
-	client, e := GetPGClient()
-	defer client.Close()
-
-	if e != nil {
-		return
-	}
-
-	e = client.
+	e = p.Client.
 		Find(&productList).
 		Order("id ASC").
 		Error
 	return
 }
 func (p *Product) GetByID(id uint64) (product entity.Product, e error) {
-	client, e := GetPGClient()
-	defer client.Close()
-
-	if e != nil {
-		return
-	}
-
-	e = client.
+	e = p.Client.
 		Where("id=? ", id).
 		Find(&product).
 		Error
 	return
 }
 func (p *Product) Update(id uint64, product entity.Product) (entity.Product, error) {
-	client, e := GetPGClient()
-	defer client.Close()
-
-	if e != nil {
-		return product, e
-	}
-
-	e = client.
+	e := p.Client.
 		Model(&product).
 		Where("id=?", id).
 		Updates(product).
@@ -61,13 +38,7 @@ func (p *Product) Update(id uint64, product entity.Product) (entity.Product, err
 }
 
 func (p *Product) Delete(id uint64) (e error) {
-	client, e := GetPGClient()
-	defer client.Close()
-
-	if e != nil {
-		return
-	}
-	e = client.
+	e = p.Client.
 		Where("id=?", id).
 		Find(&entity.Product{}).
 		Delete(&entity.Product{}).

@@ -3,9 +3,8 @@ package user
 import (
 	"net/http"
 
-	"github.com/hipeid/backend/errcode"
 	"github.com/ilhamrobyana/online-store-evermos-task/entity"
-	"github.com/ilhamrobyana/online-store-evermos-task/storage"
+	pg "github.com/ilhamrobyana/online-store-evermos-task/pg_storage"
 	"github.com/labstack/echo"
 )
 
@@ -24,9 +23,6 @@ func Signup(c echo.Context) (e error) {
 	response, e := userCore.signup(user)
 	if e != nil {
 		httpStatus := http.StatusInternalServerError
-		if e.Error() == errcode.UserExists {
-			httpStatus = http.StatusBadRequest
-		}
 		return c.JSON(httpStatus, map[string]interface{}{"message": e.Error()})
 	}
 	return c.JSON(http.StatusCreated, response)
@@ -52,9 +48,7 @@ func getCore() (c *core) {
 
 	if c == nil {
 		c = new(core)
-		userStorage, _ := storage.GetUserStorage(storage.Postgre)
-
-		c.userStore = userStorage
+		c.userStore = pg.User{}
 		coreInstance = c
 	}
 

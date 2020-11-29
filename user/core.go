@@ -5,15 +5,25 @@ import (
 
 	"github.com/ilhamrobyana/online-store-evermos-task/entity"
 	"github.com/ilhamrobyana/online-store-evermos-task/helper"
-	"github.com/ilhamrobyana/online-store-evermos-task/storage"
+	pg "github.com/ilhamrobyana/online-store-evermos-task/pg_storage"
+
 	"golang.org/x/crypto/bcrypt"
 )
 
 type core struct {
-	userStore storage.UserStorage
+	userStore pg.User
 }
 
 func (c *core) signup(user entity.User) (response entity.LoginResponse, e error) {
+	client, e := pg.GetPGClient()
+	defer client.Close()
+
+	if e != nil {
+		return entity.LoginResponse{}, e
+	}
+
+	c.userStore.Client = client
+
 	hashedPassword, e := bcrypt.GenerateFromPassword([]byte(user.Password), 10)
 	if e != nil {
 		return
@@ -26,6 +36,14 @@ func (c *core) signup(user entity.User) (response entity.LoginResponse, e error)
 }
 
 func (c *core) login(username, password string) (response entity.LoginResponse, e error) {
+	client, e := pg.GetPGClient()
+	defer client.Close()
+
+	if e != nil {
+		return entity.LoginResponse{}, e
+	}
+
+	c.userStore.Client = client
 	user, e := c.userStore.GetByUsername(username)
 	if e != nil {
 		return
