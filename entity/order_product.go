@@ -7,6 +7,6 @@ type OrderProduct struct {
 	OrderID   uint64   `json:"order_id" gorm:"foreign_key;type:bigserial"`
 	Product   *Product `json:"product"`
 	ProductID uint64   `json:"product_id" gorm:"foreign_key;type:bigserial"`
-	Quantity  int      `json:"quantity"`
+	Quantity  uint     `json:"quantity"`
 	Timestamp
 }

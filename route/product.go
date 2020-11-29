@@ -11,7 +11,7 @@ func productRoute(e *echo.Echo) {
 	g.Use(mwcustom.Authorization)
 	g.POST("/", product.Create)
 	g.GET("/", product.GetAll)
-	g.GET("/:id", product.GetByID)
+	// g.GET("/:id", product.GetByID)
 	g.PUT("/:id", product.Update)
-	g.DELETE("/:id", product.Delete)
+	// g.DELETE("/:id", product.Delete)
 }

@@ -8,7 +8,7 @@ import (
 )
 
 type OrderStorage interface {
-	Create(order entity.Order) (entity.Order, error)
+	Create(item []entity.Item, userID uint64) (entity.Order, error)
 	GetAll(userID uint64) ([]entity.Order, error)
 	GetByID(id uint64) (entity.Order, error)
 	Update(id uint64, order entity.Order) (entity.Order, error)
